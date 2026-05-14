@@ -111,13 +111,27 @@ a:hover {
 .flex-col { display: flex; flex-direction: column; }
 .items-center { align-items: center; }
 .justify-between { justify-content: space-between; }
+.justify-end { justify-content: flex-end; }
 .justify-center { justify-content: center; }
 .gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
 .gap-4 { gap: 16px; }
 .gap-6 { gap: 24px; }
+.gap-10 { gap: 40px; }
 .mt-4 { margin-top: 16px; }
+.mt-8 { margin-top: 32px; }
+.mt-10 { margin-top: 40px; }
+.mt-auto { margin-top: auto; }
 .mb-4 { margin-bottom: 16px; }
 .mb-6 { margin-bottom: 24px; }
+.mb-8 { margin-bottom: 32px; }
+.mb-10 { margin-bottom: 40px; }
+.mb-12 { margin-bottom: 48px; }
+.p-4 { padding: 16px; }
+.p-12 { padding: 48px; }
+.px-8 { padding-left: 32px; padding-right: 32px; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
 
 /* Form Control */
 .form-group {

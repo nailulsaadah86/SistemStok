@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS public.users (
 -- (Sudah di hash menggunakan bcrypt)
 INSERT INTO public.users (username, password, role) VALUES 
 ('admin', '$2b$10$Bv07iFIfZJ1KYbo/iD2H4OP1zz9M2bzkNt88xy3TPYT/DfZTsAuay', 'admin'),
-('gudang', '$2b$10$kXN7v4G5D0wX5V0W5V0W5V0W5V0W5V0W5V0W5V0W5V0W5V0W5V0W', 'gudang')
+('gudang', '$2b$10$YWqQMUO79HMt1ElV2XbXeuWl1FSTrfgZNG/4XR0HBnDc2E7TetNEi', 'gudang')
 ON CONFLICT (username) DO NOTHING;
 
 -- 2. Table products

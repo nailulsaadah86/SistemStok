@@ -21,9 +21,11 @@ router.post('/', [verifyToken, isAdmin], async (req: Request, res: Response) => 
 });
 
 router.put('/:id', [verifyToken, isAdmin], async (req: Request, res: Response) => {
-  const { name, sku, category, image_url } = req.body;
+  const { name, sku, category, image_url, stock } = req.body;
+  const updateData: any = { name, sku, category, image_url };
+  if (stock !== undefined) updateData.stock = stock;
   const { data, error } = await supabase.from('products')
-    .update({ name, sku, category, image_url })
+    .update(updateData)
     .eq('id', req.params.id)
     .select()
     .single();

@@ -30,6 +30,7 @@ export default function GudangDashboard({ user, onLogout }: GudangProps) {
   const [qty, setQty] = useState<string>('');
   const [note, setNote] = useState<string>('');
   const [method, setMethod] = useState<string>('CASH');
+  const [totalAmount, setTotalAmount] = useState<string>('');
 
   const fetchProducts = async () => {
     try {
@@ -58,22 +59,24 @@ export default function GudangDashboard({ user, onLogout }: GudangProps) {
         type: activeModal?.type,
         qty: parseInt(qty),
         note: note,
-        payment_method: method
+        payment_method: method,
+        total_amount: parseInt(totalAmount) || 0
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      const totalAmount = res.data.total_amount;
+      const txAmount = res.data.total_amount;
       const txType = activeModal?.type || 'OUT';
       const txQty = parseInt(qty);
       
       setActiveModal(null);
       setQty('');
       setNote('');
+      setTotalAmount('');
       fetchProducts();
       
       // Tampilkan Instruksi Pembayaran
-      setShowPayment({ amount: totalAmount, method, type: txType, qty: txQty });
+      setShowPayment({ amount: txAmount, method, type: txType, qty: txQty });
       
     } catch (err: any) {
       alert(err.response?.data?.error || 'Gagal mengubah stok');
@@ -96,7 +99,7 @@ export default function GudangDashboard({ user, onLogout }: GudangProps) {
           <div style={{ padding: '2px', background: 'linear-gradient(135deg, var(--accent), var(--primary))', borderRadius: '10px' }}>
             <img src={logo} alt="L" style={{ width: '32px', height: '32px', borderRadius: '8px', objectFit: 'cover' }} />
           </div>
-          <h2 style={{ fontSize: '1.25rem', margin: 0, background: 'linear-gradient(135deg, #fff 0%, #94a3b8 100%)', webkitBackgroundClip: 'text', webkitTextFillColor: 'transparent' }}>Warehouse</h2>
+          <h2 style={{ fontSize: '1.25rem', margin: 0, background: 'linear-gradient(135deg, #fff 0%, #94a3b8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Warehouse</h2>
         </div>
 
         <div style={{ flex: 1, paddingRight: '16px' }}>
@@ -145,7 +148,7 @@ export default function GudangDashboard({ user, onLogout }: GudangProps) {
 
           <div className="glass-panel animate-fade-in gradient-border">
             <div className="flex justify-between items-center mb-8">
-              <h3 style={{webkitTextFillColor: 'white'}}>Katalog Stok Aktif</h3>
+              <h3 style={{WebkitTextFillColor: 'white'}}>Katalog Stok Aktif</h3>
               <div style={{ position: 'relative', width: '350px' }}>
                 <Search size={18} style={{ position: 'absolute', top: 16, left: 16, color: 'var(--text-muted)' }} />
                 <input 
@@ -221,7 +224,7 @@ export default function GudangDashboard({ user, onLogout }: GudangProps) {
           display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100
         }}>
           <div className="glass-panel animate-fade-in gradient-border" style={{ width: '100%', maxWidth: '480px', padding: '40px' }}>
-            <h3 style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: 12, webkitTextFillColor: 'white' }}>
+            <h3 style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: 12, WebkitTextFillColor: 'white' }}>
               {activeModal.type === 'IN' ? <PlusCircle color="var(--success)" /> : <MinusCircle color="var(--danger)" />}
               Stok {activeModal.type === 'IN' ? 'Baru Masuk' : 'Baru Keluar'}
             </h3>
@@ -251,6 +254,11 @@ export default function GudangDashboard({ user, onLogout }: GudangProps) {
               </div>
 
               <div className="form-group">
+                <label>Nominal (Rp)</label>
+                <input type="number" className="form-control" placeholder="0" value={totalAmount} onChange={e => setTotalAmount(e.target.value)} />
+              </div>
+
+              <div className="form-group">
                 <label>Catatan / Alasan</label>
                 <input type="text" className="form-control" placeholder="Tulis keterangan singkat..." value={note} onChange={e => setNote(e.target.value)} required />
               </div>
@@ -277,7 +285,7 @@ export default function GudangDashboard({ user, onLogout }: GudangProps) {
               <div style={{ width: '64px', height: '64px', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
                 <CheckCircle size={32} />
               </div>
-              <h3 style={{webkitTextFillColor: 'white'}}>Transaksi Berhasil</h3>
+              <h3 style={{WebkitTextFillColor: 'white'}}>Transaksi Berhasil</h3>
               <p style={{color: 'var(--text-muted)'}}>{showPayment.type === 'IN' ? 'Stok baru telah dicatat.' : 'Pengeluaran stok berhasil.'}</p>
             </div>
 

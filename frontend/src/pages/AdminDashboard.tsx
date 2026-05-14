@@ -104,7 +104,7 @@ export default function AdminDashboard({ user, onLogout }: AdminProps) {
           <div style={{ padding: '2px', background: 'linear-gradient(135deg, var(--primary), var(--secondary))', borderRadius: '10px' }}>
             <img src={logo} alt="L" style={{ width: '32px', height: '32px', borderRadius: '8px', objectFit: 'cover' }} />
           </div>
-          <h2 style={{ fontSize: '1.25rem', margin: 0, background: 'linear-gradient(135deg, #fff 0%, #94a3b8 100%)', webkitBackgroundClip: 'text', webkitTextFillColor: 'transparent' }}>Nady Hub</h2>
+          <h2 style={{ fontSize: '1.25rem', margin: 0, background: 'linear-gradient(135deg, #fff 0%, #94a3b8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Nady Hub</h2>
         </div>
 
         <div style={{ flex: 1, paddingRight: '16px' }}>
@@ -258,7 +258,7 @@ function Overview({ stats }: { stats: Stats }) {
 
       <div className="glass-panel">
         <div className="flex justify-between items-center mb-8">
-          <h3 style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'none', webkitTextFillColor: 'white' }}>
+          <h3 style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'none', WebkitTextFillColor: 'white' }}>
             <History size={20} color="var(--primary)"/> Transaksi Terakhir
           </h3>
           <Link to="/admin/logs" className="btn" style={{ background: 'rgba(139, 92, 246, 0.1)', color: 'var(--primary)', fontSize: '0.8rem', padding: '8px 16px' }}>
@@ -308,7 +308,7 @@ function Overview({ stats }: { stats: Stats }) {
 function Catalog({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
   const [products, setProducts] = useState<any[]>([]);
   const [showModal, setShowModal] = useState<any>(null);
-  const [form, setForm] = useState({ name: '', sku: '', category: '' });
+  const [form, setForm] = useState({ name: '', sku: '', category: '', stock: 0 });
 
   const fetchProducts = () => {
     const token = user.token.trim();
@@ -330,7 +330,7 @@ function Catalog({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
         await axios.put(`http://localhost:5000/api/products/${showModal.id}`, form, { headers: { Authorization: `Bearer ${token}` }});
       }
       setShowModal(null);
-      setForm({ name: '', sku: '', category: '' });
+      setForm({ name: '', sku: '', category: '', stock: 0 });
       fetchProducts();
       onUpdate();
     } catch (err: any) {
@@ -339,7 +339,7 @@ function Catalog({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
   };
 
   const handleEdit = (p: any) => {
-    setForm({ name: p.name, sku: p.sku, category: p.category });
+    setForm({ name: p.name, sku: p.sku, category: p.category, stock: p.stock });
     setShowModal(p);
   };
 
@@ -358,8 +358,8 @@ function Catalog({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
   return (
     <div className="animate-fade-in">
       <div className="flex justify-between items-center mb-8">
-        <h2 style={{webkitTextFillColor: 'white'}}>Katalog Produk</h2>
-        <button className="btn btn-primary" onClick={() => { setForm({ name: '', sku: '', category: '' }); setShowModal('new'); }}>
+        <h2 style={{WebkitTextFillColor: 'white'}}>Katalog Produk</h2>
+        <button className="btn btn-primary" onClick={() => { setForm({ name: '', sku: '', category: '', stock: 0 }); setShowModal('new'); }}>
           <Plus size={18} /> Daftarkan Produk
         </button>
       </div>
@@ -407,7 +407,7 @@ function Catalog({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
           zIndex: 100, padding: '24px'
         }}>
           <div className="glass-panel animate-fade-in gradient-border" style={{ width: '100%', maxWidth: '500px' }}>
-            <h3 style={{ marginBottom: '24px', webkitTextFillColor: 'white' }}>{showModal === 'new' ? 'Registrasi Produk Baru' : 'Perbarui Detail Produk'}</h3>
+            <h3 style={{ marginBottom: '24px', WebkitTextFillColor: 'white' }}>{showModal === 'new' ? 'Registrasi Produk Baru' : 'Perbarui Detail Produk'}</h3>
             <form onSubmit={handleSave}>
               <div className="flex gap-4">
                 <div className="form-group" style={{flex: 1}}>
@@ -423,6 +423,12 @@ function Catalog({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
                 <label>Kategori</label>
                 <input type="text" className="form-control" required value={form.category} onChange={e => setForm({...form, category: e.target.value})} />
               </div>
+              {showModal !== 'new' && (
+                <div className="form-group">
+                  <label>Stok</label>
+                  <input type="number" className="form-control" value={form.stock} onChange={e => setForm({...form, stock: parseInt(e.target.value) || 0})} />
+                </div>
+              )}
               <div className="flex gap-4 justify-end mt-8">
                 <button type="button" className="btn" onClick={() => setShowModal(null)} style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid var(--surface-border)' }}>Batal</button>
                 <button type="submit" className="btn btn-primary">Simpan Database</button>
@@ -461,12 +467,12 @@ function Finance({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
     }
   };
 
-  const filtered = transactions.filter(t => t.type !== 'OUT' && (filter === 'ALL' ? true : t.payment_status === filter));
+  const filtered = transactions.filter(t => filter === 'ALL' ? true : t.payment_status === filter);
 
   return (
     <div className="animate-fade-in">
       <div className="flex justify-between items-center mb-8">
-        <h2 style={{webkitTextFillColor: 'white'}}>Manajemen Pembayaran</h2>
+        <h2 style={{WebkitTextFillColor: 'white'}}>Manajemen Pembayaran</h2>
       </div>
 
       <div className="glass-panel">
@@ -539,7 +545,7 @@ function Finance({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
               <div style={{ width: '64px', height: '64px', background: 'rgba(139, 92, 246, 0.1)', color: 'var(--primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <ClipboardList size={32} />
               </div>
-              <h3 style={{webkitTextFillColor: 'white'}}>Detail Tagihan</h3>
+              <h3 style={{WebkitTextFillColor: 'white'}}>Detail Tagihan</h3>
               <p style={{color: 'var(--text-muted)', fontSize: '0.85rem'}}>#{selectedTx.id.slice(0,8)}</p>
             </div>
 
@@ -697,7 +703,7 @@ function Suppliers({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
         <div style={{ width: '80px', height: '80px', background: 'rgba(139, 92, 246, 0.1)', color: 'var(--primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
           <Truck size={40} />
         </div>
-        <h2 style={{webkitTextFillColor: 'white', fontSize: '2rem', marginBottom: '16px'}}>Manajemen Mitra Supplier</h2>
+        <h2 style={{WebkitTextFillColor: 'white', fontSize: '2rem', marginBottom: '16px'}}>Manajemen Mitra Supplier</h2>
         <p style={{ color: 'var(--text-muted)', maxWidth: '500px', marginBottom: '32px' }}>Kelola daftar pemasok barang Anda dalam satu tempat yang terpusat dan efisien.</p>
         <button className="btn btn-primary" style={{ padding: '14px 28px', fontSize: '1rem', height: 'auto' }} onClick={() => { setForm({ name: '', phone: '', email: '', address: '' }); setShowModal('new'); }}>
           <Plus size={20} /> Tambah Mitra Baru
@@ -722,7 +728,7 @@ function Suppliers({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
                     <a 
                       href={`https://wa.me/${s.phone?.replace(/[^0-9]/g, '')}?text=Halo%20${s.name},%20saya%20Admin%20Nady%20Fashion%20ingin%20bertanya%20mengenai%20stok...`} 
                       target="_blank" 
-                      rel="noreferrer" 
+                      rel="noopener noreferrer" 
                       className="badge badge-in"
                       style={{display:'inline-flex', alignItems:'center', gap:'4px', textDecoration:'none'}}
                     >
@@ -756,7 +762,7 @@ function Suppliers({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
           zIndex: 100, padding: '24px'
         }}>
           <div className="glass-panel animate-fade-in gradient-border" style={{ width: '100%', maxWidth: '450px' }}>
-            <h3 style={{ marginBottom: '24px', webkitTextFillColor: 'white' }}>{showModal === 'new' ? 'Tambah Mitra Supplier' : 'Perbarui Data Supplier'}</h3>
+            <h3 style={{ marginBottom: '24px', WebkitTextFillColor: 'white' }}>{showModal === 'new' ? 'Tambah Mitra Supplier' : 'Perbarui Data Supplier'}</h3>
             <form onSubmit={handleSave}>
               <div className="form-group">
                 <label>Nama / Perusahaan</label>
@@ -805,7 +811,7 @@ function Suppliers({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
                       <CreditCard size={24} />
                    </div>
                    <div>
-                      <h3 style={{ webkitTextFillColor: 'white', margin: 0 }}>Pembayaran Supplier</h3>
+                      <h3 style={{ WebkitTextFillColor: 'white', margin: 0 }}>Pembayaran Supplier</h3>
                       <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{payModal.name}</p>
                    </div>
                 </div>
@@ -858,7 +864,7 @@ function Suppliers({ user, onUpdate }: { user: User, onUpdate: ()=>void }) {
                 <div style={{ width: '80px', height: '80px', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
                   <CheckCircle2 size={48} />
                 </div>
-                <h2 style={{ webkitTextFillColor: 'white', marginBottom: '8px' }}>VA Berhasil Dibuat</h2>
+                <h2 style={{ WebkitTextFillColor: 'white', marginBottom: '8px' }}>VA Berhasil Dibuat</h2>
                 <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Silakan lakukan pembayaran ke nomor VA berikut:</p>
                 
                 <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '20px', padding: '32px', marginBottom: '32px', border: '1px dashed var(--surface-border)' }}>
@@ -935,7 +941,7 @@ function OperatingExpenses({ user, onUpdate }: { user: User, onUpdate: () => voi
   return (
     <div className="animate-fade-in">
       <div className="flex justify-between items-center mb-8">
-        <h2 style={{webkitTextFillColor: 'white'}}>Pengeluaran Operasional</h2>
+        <h2 style={{WebkitTextFillColor: 'white'}}>Pengeluaran Operasional</h2>
         <button className="btn btn-primary" onClick={() => setShowModal(true)}>
           <Plus size={18} /> Catat Pengeluaran
         </button>
@@ -982,7 +988,7 @@ function OperatingExpenses({ user, onUpdate }: { user: User, onUpdate: () => voi
           zIndex: 100, padding: '24px'
         }}>
           <div className="glass-panel animate-fade-in gradient-border" style={{ width: '100%', maxWidth: '450px' }}>
-            <h3 style={{ marginBottom: '24px', webkitTextFillColor: 'white' }}>Baru: Catat Pengeluaran</h3>
+            <h3 style={{ marginBottom: '24px', WebkitTextFillColor: 'white' }}>Baru: Catat Pengeluaran</h3>
             <form onSubmit={handleSave}>
               <div className="form-group">
                 <label>Kategori</label>
@@ -1030,7 +1036,7 @@ function Logs({ user }: { user: User }) {
 
   return (
     <div className="animate-fade-in">
-      <h2 style={{ marginBottom: '32px', webkitTextFillColor: 'white' }}>Jurnal Aktivitas Sistem</h2>
+          <h2 style={{ marginBottom: '32px', WebkitTextFillColor: 'white' }}>Jurnal Aktivitas Sistem</h2>
       <div className="glass-panel">
         <div className="table-container">
           <table>
