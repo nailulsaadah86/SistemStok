@@ -16,17 +16,23 @@ router.post('/login', async (req: Request, res: Response) => {
       .single();
 
     if (error || !user) {
-      return res.status(404).json({ error: "User Not found." });
+      return res.status(401).json({ error: "Invalid username or password" });
     }
 
     const passwordIsValid = await bcrypt.compare(password, user.password);
     if (!passwordIsValid) {
-      return res.status(401).json({ accessToken: null, error: "Invalid Password!" });
+      return res.status(401).json({ error: "Invalid username or password" });
+    }
+
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.error('[AUTH ERROR] JWT_SECRET tidak diatur di environment');
+      return res.status(500).json({ error: 'Server configuration error.' });
     }
 
     const token = jwt.sign(
       { id: user.id, role: user.role, username: user.username },
-      process.env.JWT_SECRET || 'secret',
+      jwtSecret,
       { expiresIn: 86400 } // 24 hours
     );
 

@@ -2,3 +2,7 @@ node_modules/
 dist/
 .env
 *.log
+
+# Sensitive files with hardcoded credentials
+backend/run_sql.ts
+backend/scratch/

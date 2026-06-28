@@ -50,7 +50,9 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
     const newStock = type === 'IN' ? currentStock + qty : currentStock - qty;
     
     // Total amount set to 0 as prices are no longer used in inventory catalog
-    const total_amount = provided_amount !== undefined ? provided_amount : 0;
+    const total_amount = provided_amount !== undefined && !isNaN(provided_amount) && provided_amount >= 0
+      ? provided_amount
+      : 0;
 
     if (newStock < 0) {
       return res.status(400).json({ error: "Insufficient stock." });
@@ -87,7 +89,11 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
 
     if (errLog) {
       // Rollback stock update
-      await supabase.from('products').update({stock: currentStock}).eq('id', product_id);
+      try {
+        await supabase.from('products').update({stock: currentStock}).eq('id', product_id);
+      } catch (rollbackErr) {
+        console.error('[TRANSACTION ERROR] Rollback gagal:', rollbackErr);
+      }
       return res.status(500).json({ error: errLog.message });
     }
 
