@@ -91,3 +91,9 @@ Setelah database berhasil disiapkan melalui script SQL, Anda dapat menggunakan a
 
 ---
 *Dokumentasi lengkap dan manual operasional bagi pengguna dapat dilihat di file `manualbook.md`.*
+
+---
+
+**NAMA : NAILUL SA'ADAH**  
+**NIM : 101230086**  
+**KELAS : TF23B**
